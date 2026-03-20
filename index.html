@@ -66,7 +66,7 @@ body {
   align-items: center;
 }
 #modalContent {
-  position: relative;
+  position: relative; /* 必須 */
   background: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -96,6 +96,7 @@ body {
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  z-index: 10;
 }
 .modalCloseX:active { transform: scale(0.9); }
 
@@ -207,9 +208,8 @@ function addHistory(text) {
   const entry = `[${dateStr}] ${text}`;
 
   let history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
-  history.unshift(entry); // 最新を上に
+  history.unshift(entry);
   localStorage.setItem('calcHistory', JSON.stringify(history));
-
   updateHistoryList();
 }
 
@@ -233,7 +233,6 @@ function updateHistoryList() {
     div.className = 'historyItem';
     div.textContent = item;
 
-    // クリックで再利用
     div.addEventListener('click', () => {
       const formula = item.split(' = ')[0].split('] ')[1];
       expression = formula;
@@ -241,7 +240,6 @@ function updateHistoryList() {
       closeModal();
     });
 
-    // 削除ボタン
     const delBtn = document.createElement('button');
     delBtn.textContent = '×';
     delBtn.style.marginLeft = '5px';

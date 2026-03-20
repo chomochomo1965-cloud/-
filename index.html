@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>スマホ用横書き履歴電卓</title>
+<title>履歴電卓</title>
 <style>
   body {
     font-family: sans-serif;
@@ -74,7 +74,6 @@
     text-align: left;
     font-size: 18px;
   }
-  /* 履歴アイテム 横書き、大きめ */
   .historyItem {
     display: flex;
     justify-content: space-between;
@@ -103,7 +102,7 @@
 </style>
 </head>
 <body>
-<h2>スマホ用横書き履歴電卓</h2>
+<h2>履歴電卓</h2>
 <input type="text" id="display" readonly>
 <div>
   <button class="btn" onclick="press('7')">7</button>
@@ -134,7 +133,6 @@
 </div>
 <button id="historyBtn" class="btn" onclick="openModal()">履歴</button>
 
-<!-- モーダル -->
 <div id="modal">
   <div id="modalContent">
     <h3>履歴</h3>
@@ -149,7 +147,6 @@
 <script>
 let expression = '';
 
-// 電卓操作
 function press(value) {
   expression += value;
   document.getElementById('display').value = expression;
@@ -172,23 +169,20 @@ function clearDisplay() {
   document.getElementById('display').value = '';
 }
 
-// 履歴管理（localStorage使用）
 function addHistory(text) {
   const now = new Date();
   const weekdays = ['日','月','火','水','木','金','土'];
-  const y = now.getFullYear();
   const m = now.getMonth() + 1;
   const d = now.getDate();
   const w = weekdays[now.getDay()];
-  const dateStr = `${y}/${m}/${d} (${w})`;
+  const dateStr = `${m}/${d} (${w})`;
   const entry = `[${dateStr}] ${text}`;
   let history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
-  history.unshift(entry); // 最新を上に
+  history.unshift(entry);
   localStorage.setItem('calcHistory', JSON.stringify(history));
   updateHistoryList();
 }
 
-// モーダル
 function openModal() {
   document.getElementById('modal').style.display = 'flex';
   updateHistoryList();
@@ -198,7 +192,6 @@ function closeModal() {
   document.getElementById('modal').style.display = 'none';
 }
 
-// 履歴リスト更新
 function updateHistoryList() {
   const historyList = document.getElementById('historyList');
   historyList.innerHTML = '';
@@ -207,14 +200,12 @@ function updateHistoryList() {
     const div = document.createElement('div');
     div.className = 'historyItem';
     div.textContent = item;
-    // クリックで再利用
     div.addEventListener('click', () => {
       const formula = item.split(' = ')[0].split('] ')[1];
       expression = formula;
       document.getElementById('display').value = expression;
       closeModal();
     });
-    // 削除ボタン
     const delBtn = document.createElement('button');
     delBtn.textContent = '×';
     delBtn.style.marginLeft = '5px';
@@ -229,7 +220,6 @@ function updateHistoryList() {
   });
 }
 
-// 履歴クリア
 function clearHistory() {
   if (confirm("履歴をすべて削除しますか？")) {
     localStorage.removeItem('calcHistory');
@@ -237,7 +227,6 @@ function clearHistory() {
   }
 }
 
-// キーボード対応
 document.addEventListener('keydown', (e) => {
   if ((e.key >= '0' && e.key <= '9') || e.key === '.' || ['+', '-', '*', '/'].includes(e.key)) {
     press(e.key);

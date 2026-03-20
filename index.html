@@ -89,9 +89,8 @@
   .historyItem:hover {
     background: #e0e0e0;
   }
-  .closeBtn {
+  .closeBtn, .clearHistoryBtn {
     margin-top: 10px;
-    background: #f44336;
     color: #fff;
     border: none;
     padding: 10px 15px;
@@ -99,6 +98,8 @@
     cursor: pointer;
     font-size: 18px;
   }
+  .closeBtn { background: #f44336; }
+  .clearHistoryBtn { background: #2196F3; margin-right: 10px; }
 </style>
 </head>
 <body>
@@ -138,7 +139,10 @@
   <div id="modalContent">
     <h3>履歴</h3>
     <div id="historyList"></div>
-    <button class="closeBtn" onclick="closeModal()">閉じる</button>
+    <div style="text-align: right;">
+      <button class="clearHistoryBtn" onclick="clearHistory()">履歴クリア</button>
+      <button class="closeBtn" onclick="closeModal()">閉じる</button>
+    </div>
   </div>
 </div>
 
@@ -223,6 +227,14 @@ function updateHistoryList() {
     div.appendChild(delBtn);
     historyList.appendChild(div);
   });
+}
+
+// 履歴クリア
+function clearHistory() {
+  if (confirm("履歴をすべて削除しますか？")) {
+    localStorage.removeItem('calcHistory');
+    updateHistoryList();
+  }
 }
 
 // キーボード対応
